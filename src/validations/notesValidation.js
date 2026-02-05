@@ -1,16 +1,8 @@
-import { celebrate, Joi, Segments } from 'celebrate';
+import { Joi, Segments } from 'celebrate';
 import mongoose from 'mongoose';
 import { TAGS } from '../constants/tags.js';
 
-/**
- * GET /notes
- * query:
- *  - page: number >= 1, default 1
- *  - perPage: number 5..20, default 10
- *  - tag: one of TAGS (optional)
- *  - search: string (can be empty)
- */
-export const getAllNotesSchema = celebrate({
+export const getAllNotesSchema = {
   [Segments.QUERY]: Joi.object({
     page: Joi.number().integer().min(1).default(1),
     perPage: Joi.number().integer().min(5).max(20).default(10),
@@ -19,12 +11,9 @@ export const getAllNotesSchema = celebrate({
       .optional(),
     search: Joi.string().allow('').optional(),
   }),
-});
+};
 
-/**
- * noteId param validation
- */
-export const noteIdSchema = celebrate({
+export const noteIdSchema = {
   [Segments.PARAMS]: Joi.object({
     noteId: Joi.string().custom((value, helpers) => {
       if (!mongoose.isValidObjectId(value)) {
@@ -33,16 +22,9 @@ export const noteIdSchema = celebrate({
       return value;
     }),
   }),
-});
+};
 
-/**
- * POST /notes
- * body:
- *  - title: string, min 1 (required)
- *  - content: string (optional, can be empty)
- *  - tag: one of TAGS (optional)
- */
-export const createNoteSchema = celebrate({
+export const createNoteSchema = {
   [Segments.BODY]: Joi.object({
     title: Joi.string().min(1).required(),
     content: Joi.string().allow('').optional(),
@@ -50,14 +32,9 @@ export const createNoteSchema = celebrate({
       .valid(...TAGS)
       .optional(),
   }),
-});
+};
 
-/**
- * PATCH /notes/:noteId
- * params + body
- * body must contain at least one of: title, content, tag
- */
-export const updateNoteSchema = celebrate({
+export const updateNoteSchema = {
   [Segments.PARAMS]: Joi.object({
     noteId: Joi.string().custom((value, helpers) => {
       if (!mongoose.isValidObjectId(value)) {
@@ -73,4 +50,4 @@ export const updateNoteSchema = celebrate({
       .valid(...TAGS)
       .optional(),
   }).min(1),
-});
+};

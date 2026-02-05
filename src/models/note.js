@@ -29,4 +29,7 @@ const noteSchema = new mongoose.Schema(
   }
 );
 
+// ✅ ТЕКСТОВЫЙ ИНДЕКС (ОБЯЗАТЕЛЬНО ПО ТЗ)
+noteSchema.index({ title: 'text', content: 'text' });
+
 export const Note = mongoose.model('Note', noteSchema);
