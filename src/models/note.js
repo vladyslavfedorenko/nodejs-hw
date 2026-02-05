@@ -18,13 +18,15 @@ const noteSchema = new mongoose.Schema(
       enum: TAGS,
       default: 'Todo',
     },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
   },
   {
     timestamps: true,
   }
 );
-
-// 🔎 текстовый индекс для поиска
-noteSchema.index({ title: 'text', content: 'text' });
 
 export const Note = mongoose.model('Note', noteSchema);
