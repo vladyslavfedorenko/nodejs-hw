@@ -20,12 +20,16 @@ app.use(logger);
 app.use(cors());
 app.use(express.json());
 
+// 1️⃣ маршруты
 app.use(notesRoutes);
 
-// ✅ обработка ошибок celebrate (ВАЖНО: ДО notFoundHandler)
+// 2️⃣ notFound — СРАЗУ после маршрутов
+app.use(notFoundHandler);
+
+// 3️⃣ ошибки celebrate
 app.use(errors());
 
-app.use(notFoundHandler);
+// 4️⃣ глобальный errorHandler — ПОСЛЕДНИЙ
 app.use(errorHandler);
 
 app.listen(PORT, () => {
