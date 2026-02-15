@@ -1,6 +1,8 @@
+import dotenv from 'dotenv';
+dotenv.config(); // 🔥 ВАЖНО — первым
+
 import express from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import { errors } from 'celebrate';
 
@@ -11,8 +13,7 @@ import { errorHandler } from './middleware/errorHandler.js';
 
 import notesRoutes from './routes/notesRoutes.js';
 import authRoutes from './routes/authRoutes.js';
-
-dotenv.config();
+import userRoutes from './routes/userRoutes.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -29,19 +30,12 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
-// 🔐 auth routes
 app.use(authRoutes);
-
-// 📝 notes routes (позже защитим authenticate)
 app.use(notesRoutes);
+app.use(userRoutes);
 
-// 404 — сразу после всех роутов
 app.use(notFoundHandler);
-
-// celebrate errors
 app.use(errors());
-
-// global error handler
 app.use(errorHandler);
 
 app.listen(PORT, () => {
