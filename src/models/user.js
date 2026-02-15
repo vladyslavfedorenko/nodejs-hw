@@ -34,9 +34,9 @@ userSchema.methods.toJSON = function () {
   return obj;
 };
 
-// Mongoose 7+ — без next()
+// username = email только если username не указан
 userSchema.pre('save', function () {
-  if (this.isModified('email')) {
+  if (!this.username) {
     this.username = this.email;
   }
 });
